@@ -1,0 +1,10 @@
+
+<%= form_with url: events_path, method: :post do |form| %>
+  <%= form.submit "Create" %>
+<% end %>
+
+<ul>
+  <% @events.each do |event| %>
+    <li><%= event.id %> | <%= event.created_at %></li>
+  <% end %>
+</ul>
