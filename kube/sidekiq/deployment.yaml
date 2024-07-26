@@ -9,12 +9,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sidekiq
+      app: infra-app
       tier: backgroundjobs
   template:
     metadata:
       labels:
-        app: sidekiq
+        app: infra-app
         tier: backgroundjobs
     spec:
       containers:
