@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidekiq
+  labels:
+    app: infra-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidekiq
+      tier: backgroundjobs
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+        tier: backgroundjobs
+    spec:
+      containers:
+        - name: sidekiq
+          image: infra:latest
+          imagePullPolicy: Never
+          command: ["bundle", "exec", "sidekiq"]
+          envFrom:
+            - configMapRef:
+                name: env
+          env:
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_password
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: rails_master_key

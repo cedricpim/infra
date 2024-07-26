@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: infra-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: infra-app
+      tier: database
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app: infra-app
+        tier: database
+    spec:
+      volumes:
+        - name: postgres-pv
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+      containers:
+        - name: postgres
+          image: postgres:16.3-alpine
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: secret
+            - name: POSTGRES_DB
+              value: infra
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: "/var/lib/postgresql/data"
+              name: postgres-pv

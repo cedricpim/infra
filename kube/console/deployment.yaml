@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console
+  labels:
+    app: infra-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: infra-app
+      tier: console
+  template:
+    metadata:
+      labels:
+        app: infra-app
+        tier: console
+    spec:
+      containers:
+        - name: console
+          image: infra:latest
+          imagePullPolicy: Never
+          stdin: true
+          tty: true
+          command: ["sleep"]
+          args: ["infinity"]
+          envFrom:
+            - configMapRef:
+                name: env
+          env:
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_password
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: rails_master_key

@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: infra-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: infra-app
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: infra-app
+        tier: app
+    spec:
+      containers:
+        - name: infra-container
+          image: infra:latest
+          imagePullPolicy: Never
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: env
+          env:
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_password
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: rails_master_key
