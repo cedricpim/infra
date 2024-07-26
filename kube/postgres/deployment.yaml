@@ -27,11 +27,20 @@ spec:
           image: postgres:16.3-alpine
           env:
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_username
             - name: POSTGRES_PASSWORD
-              value: secret
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: postgres_password
             - name: POSTGRES_DB
-              value: infra
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: POSTGRES_DB
           ports:
             - containerPort: 5432
           volumeMounts:
