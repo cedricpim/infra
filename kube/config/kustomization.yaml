@@ -1,0 +1,4 @@
+---
+resources:
+  - env.yaml
+  - secrets.yaml

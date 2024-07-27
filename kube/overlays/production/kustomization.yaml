@@ -1,0 +1,7 @@
+---
+resources:
+  - ../../config
+
+patches:
+  - path: env.yaml
+  - path: secrets.yaml

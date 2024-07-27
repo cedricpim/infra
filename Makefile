@@ -1,8 +1,7 @@
 ENV ?= development
 
 setup:
-	kubectl apply -f kube/env.yaml
-	kubectl apply -f kube/secrets.yaml
+	kubectl kustomize kube/overlays/$(ENV)/ | kubectl apply -f -
 	kubectl apply -f kube/postgres
 	kubectl apply -f kube/redis
 	kubectl apply -f kube/app
