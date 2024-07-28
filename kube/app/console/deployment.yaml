@@ -2,7 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sidekiq
+  name: console
+  namespace: app
   labels:
     app: infra-app
 spec:
@@ -10,18 +11,21 @@ spec:
   selector:
     matchLabels:
       app: infra-app
-      tier: backgroundjobs
+      tier: console
   template:
     metadata:
       labels:
         app: infra-app
-        tier: backgroundjobs
+        tier: console
     spec:
       containers:
-        - name: sidekiq
+        - name: console
           image: infra:latest
           imagePullPolicy: Never
-          command: ["bundle", "exec", "sidekiq"]
+          stdin: true
+          tty: true
+          command: ["sleep"]
+          args: ["infinity"]
           envFrom:
             - configMapRef:
                 name: env

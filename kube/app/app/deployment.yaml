@@ -2,7 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: console
+  name: app
+  namespace: app
   labels:
     app: infra-app
 spec:
@@ -10,21 +11,21 @@ spec:
   selector:
     matchLabels:
       app: infra-app
-      tier: console
+      tier: app
   template:
     metadata:
       labels:
         app: infra-app
-        tier: console
+        tier: app
     spec:
       containers:
-        - name: console
+        - name: infra-container
           image: infra:latest
           imagePullPolicy: Never
           stdin: true
           tty: true
-          command: ["sleep"]
-          args: ["infinity"]
+          ports:
+            - containerPort: 3000
           envFrom:
             - configMapRef:
                 name: env

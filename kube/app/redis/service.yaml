@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: redis
+  namespace: app
   labels:
     app: infra-app
 spec:
-  type: NodePort
+  ports:
+    - port: 6379
   selector:
     app: infra-app
-    tier: app
-  ports:
-    - port: 3000
+    tier: memdatabase
