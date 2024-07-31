@@ -11,7 +11,7 @@ setup:
 
 build:
 	eval $$(minikube -p minikube docker-env)
-	minikube image build -t infra:latest .
+	docker build -t infra:latest --build-arg BUNDLE_WITHOUT= --build-arg RAILS_ENV=development .
 
 console:
 	kubectl exec -it $$(kubectl get pods -o name -A | grep console) --namespace=app -- bundle exec rails console
