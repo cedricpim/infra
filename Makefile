@@ -1,6 +1,8 @@
 ENV ?= development
 NAMESPACE ?= app
 
+BUNDLE_WITHOUT = $(if $(patsubst development,,$(ENV)),development:test,)
+
 setup:
 	kubectl apply -f kube/app/namespace.yaml
 	kubectl kustomize kube/app/overlays/$(ENV)/ | kubectl apply -f -
@@ -12,7 +14,7 @@ setup:
 
 build:
 	eval $$(minikube -p minikube docker-env)
-	docker build -t infra:latest --build-arg BUNDLE_WITHOUT= --build-arg RAILS_ENV=$(ENV) .
+	docker build -t infra:latest --build-arg BUNDLE_WITHOUT=$(BUNDLE_WITHOUT) --build-arg RAILS_ENV=$(ENV) .
 
 console:
 	kubectl exec -it $$(kubectl get pods -o name -A | grep console) --namespace=$(NAMESPACE) -- bundle exec rails console
