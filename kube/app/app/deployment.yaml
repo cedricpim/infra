@@ -22,6 +22,7 @@ spec:
         - name: infra-container
           image: infra:latest
           imagePullPolicy: Never
+          args: ["./bin/rails", "server", "-b", "0.0.0.0"]
           stdin: true
           tty: true
           ports:
