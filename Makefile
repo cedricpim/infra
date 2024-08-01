@@ -13,7 +13,7 @@ setup:
 	kubectl apply -f kube/app/console
 
 build:
-	eval $$(minikube -p minikube docker-env)
+	eval $$(minikube docker-env); \
 	docker build -t infra:latest --build-arg BUNDLE_WITHOUT=$(BUNDLE_WITHOUT) --build-arg RAILS_ENV=$(ENV) .
 
 console:
